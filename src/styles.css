@@ -1,0 +1,232 @@
+:root {
+  --bg: #fcfaf8;
+  --fg: rgba(0, 0, 0, 0.85);
+  --muted: rgba(0, 0, 0, 0.65);
+  --border: rgba(0, 0, 0, 0.10);
+  --state-open: #1a7f37;
+  --state-closed: #cf222e;
+  --state-merged: #8250df;
+  --add-rgb: 34 204 68;
+  --del-rgb: 238 68 34;
+  --add: color-mix(rgb(var(--add-rgb)), black 20%);
+  --del: color-mix(rgb(var(--del-rgb)), black 10%);
+  --error: #cf222e;
+
+  --d2h-ins-bg-color: rgb(var(--add-rgb) / 0.15);
+  --d2h-ins-highlight-bg-color: rgb(var(--add-rgb) / 0.20);
+  --d2h-change-ins-color: rgb(var(--add-rgb) / 0.15);
+  --d2h-ins-border-color: var(--border);
+
+  --d2h-del-bg-color: rgb(var(--del-rgb) / 0.15);
+  --d2h-del-highlight-bg-color: rgb(var(--del-rgb) / 0.18);
+  --d2h-change-del-color: rgb(var(--del-rgb) / 0.15);
+  --d2h-del-border-color: var(--border);
+
+  --d2h-bg-color: var(--bg);
+  --d2h-dim-color: rgba(0, 0, 0, 0.5);
+  --d2h-border-color: none;
+  --d2h-line-border-color: var(--border);
+  --d2h-file-header-bg-color: none;
+  --d2h-file-header-border-color: none;
+  --d2h-empty-placeholder-bg-color: rgba(0, 0, 0, 0.04);
+  --d2h-empty-placeholder-border-color: rgba(0, 0, 0, 0.08);
+  --d2h-info-bg-color: rgba(0, 0, 0, 0.03);
+  --d2h-info-border-color: rgba(0, 0, 0, 0.08);
+}
+
+html {
+  margin: 0;
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Avenir', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+hr {
+  margin: 0;
+  border: 1px solid var(--border);
+}
+
+#root {
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding: 2rem 4rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.pr {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pr header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pr h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.pr h1 a {
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.sub {
+  display: flex;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.state {
+  padding: 0.125rem 0.6rem;
+  border-radius: 2em;
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.state-open { background: var(--state-open); }
+.state-closed { background: var(--state-closed); }
+.state-merged { background: var(--state-merged); }
+
+.add { color: var(--add); }
+.del { color: var(--del); }
+
+.body {
+  white-space: pre-wrap;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.placeholder,
+.error {
+  padding: 3rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.error {
+  color: var(--error);
+  white-space: pre-wrap;
+}
+
+.d2h-file-header,
+.d2h-file-name,
+.d2h-file-name-wrapper,
+.d2h-tag,
+.d2h-file-list-wrapper,
+.d2h-file-list-header,
+.d2h-file-list-title,
+.d2h-file-list,
+.d2h-file-list-line,
+.d2h-file-switch {
+  font-family: 'Avenir', sans-serif;
+}
+
+.d2h-icon,
+.d2h-tag {
+  display: none;
+}
+
+.d2h-file-collapse {
+  display: none !important;
+}
+
+.d2h-file-wrapper {
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.d2h-file-header {
+  padding: 0;
+  height: auto;
+}
+
+.d2h-file-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.d2h-diff-table,
+.d2h-diff-tbody {
+  display: block;
+  overflow: hidden;
+}
+
+.d2h-diff-table {
+  margin-bottom: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.d2h-diff-table tr {
+  display: flex;
+  justify-content: stretch;
+}
+
+.d2h-diff-table td {
+  padding: 0.125rem 0;
+}
+
+.d2h-code-line {
+  padding: 0 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.d2h-code-line-prefix {
+  color: var(--muted);
+}
+
+.d2h-code-linenumber {
+  position: inherit;
+  border-width: 0 1px 0 0;
+}
+
+.d2h-code-linenumber {
+  flex: 0 0 auto;
+}
+
+.d2h-diff-table td:not(.d2h-code-linenumber) {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.d2h-code-line-ctn {
+  white-space: pre-wrap;
+}
+
+.d2h-diff-table td.d2h-info {
+  padding: 0.375rem 0;
+}
+
+.d2h-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
