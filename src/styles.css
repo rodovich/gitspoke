@@ -4,6 +4,7 @@
   --muted: rgba(17, 0, 0, 0.65);
   --body-muted: rgba(17, 0, 0, 0.45);
   --border: rgba(17, 0, 0, 0.10);
+  --bg-tinted: rgba(17, 0, 0, 0.03);
   --state-open: #1a7f37;
   --state-closed: #cf222e;
   --state-merged: #8250df;
@@ -31,7 +32,7 @@
   --d2h-file-header-border-color: none;
   --d2h-empty-placeholder-bg-color: rgba(17, 0, 0, 0.04);
   --d2h-empty-placeholder-border-color: rgba(17, 0, 0, 0.08);
-  --d2h-info-bg-color: rgba(17, 0, 0, 0.03);
+  --d2h-info-bg-color: var(--bg-tinted);
   --d2h-info-border-color: rgba(17, 0, 0, 0.08);
 }
 
@@ -71,7 +72,18 @@ hr {
 .pr header {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.5rem;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.overview[hidden],
+.changes[hidden] {
+  display: none;
 }
 
 .pr h1 {
@@ -88,6 +100,31 @@ hr {
   font-weight: 500;
   color: var(--muted);
   text-decoration: none;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+}
+
+.tabs a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.tabs a:not(.active) {
+  color: var(--body-muted);
+}
+
+.tabs a:not(.active):hover {
+  border-bottom-color: var(--border);
+}
+
+.tabs a.active {
+  cursor: text;
 }
 
 .sub {

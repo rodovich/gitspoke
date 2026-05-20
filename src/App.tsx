@@ -28,6 +28,7 @@ export function App() {
   const { org, repo, num } = useParams()
   const [data, setData] = useState<PrResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [tab, setTab] = useState<'overview' | 'changes'>('overview')
   const diffRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -90,6 +91,34 @@ export function App() {
             #{meta.number}
           </a>
         </h1>
+        <div className="tabs" role="tablist">
+          <a
+            role="tab"
+            aria-selected={tab === 'overview'}
+            className={tab === 'overview' ? 'active' : ''}
+            onClick={(e) => {
+              e.preventDefault()
+              setTab('overview')
+            }}
+            href="#overview"
+          >
+            Overview
+          </a>
+          <a
+            role="tab"
+            aria-selected={tab === 'changes'}
+            className={tab === 'changes' ? 'active' : ''}
+            onClick={(e) => {
+              e.preventDefault()
+              setTab('changes')
+            }}
+            href="#changes"
+          >
+            Changes
+          </a>
+        </div>
+      </header>
+      <div className="overview" hidden={tab !== 'overview'}>
         {bodyHtml && <div className="body" dangerouslySetInnerHTML={{ __html: bodyHtml }} />}
         <div className="sub">
           <span className={`state state-${meta.state.toLowerCase()}`}>{meta.state}</span>
@@ -102,9 +131,8 @@ export function App() {
             <span className="del">−{meta.deletions}</span>
           </span>
         </div>
-      </header>
-      <hr/>
-      <div className="diff" ref={diffRef} />
+      </div>
+      <div className="changes" ref={diffRef} hidden={tab !== 'changes'} />
     </div>
   )
 }
