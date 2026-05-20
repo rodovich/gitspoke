@@ -29,6 +29,7 @@ export function App() {
   const [data, setData] = useState<PrResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<'overview' | 'changes'>('overview')
+  const [files, setFiles] = useState<Array<{ id: string; name: string }>>([])
   const diffRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -70,21 +71,38 @@ export function App() {
     })
     ui.draw()
     ui.highlightCode()
-    diffRef.current.querySelectorAll<HTMLElement>('.d2h-file-name').forEach((el) => {
-      const text = el.textContent ?? ''
+    const next: Array<{ id: string; name: string }> = []
+    diffRef.current.querySelectorAll<HTMLElement>('.d2h-file-wrapper').forEach((wrapper, i) => {
+      const id = `file-${i}`
+      wrapper.id = id
+      const nameEl = wrapper.querySelector<HTMLElement>('.d2h-file-name')
+      const text = nameEl?.textContent ?? ''
+      next.push({ id, name: text })
+      if (!nameEl) return
       const idx = text.lastIndexOf('/')
       const base = document.createElement('span')
       base.className = 'file-basename'
       base.textContent = idx < 0 ? text : text.slice(idx + 1)
       if (idx < 0) {
-        el.replaceChildren(base)
+        nameEl.replaceChildren(base)
       } else {
         const dir = document.createElement('span')
         dir.className = 'file-dir'
         dir.textContent = text.slice(0, idx)
-        el.replaceChildren(base, dir)
+        nameEl.replaceChildren(base, dir)
       }
     })
+    const sorted = [...next].sort((a, b) => {
+      const ai = a.name.lastIndexOf('/')
+      const bi = b.name.lastIndexOf('/')
+      const aDir = ai < 0 ? '' : a.name.slice(0, ai)
+      const bDir = bi < 0 ? '' : b.name.slice(0, bi)
+      if (aDir !== bDir) return aDir < bDir ? -1 : 1
+      const aBase = ai < 0 ? a.name : a.name.slice(ai + 1)
+      const bBase = bi < 0 ? b.name : b.name.slice(bi + 1)
+      return aBase < bBase ? -1 : aBase > bBase ? 1 : 0
+    })
+    setFiles(sorted)
   }, [data])
 
   const bodyHtml = useMemo(() => {
@@ -147,7 +165,31 @@ export function App() {
           </span>
         </div>
       </div>
-      <div className="changes" ref={diffRef} hidden={tab !== 'changes'} />
+      <div className="changes" hidden={tab !== 'changes'}>
+        <aside>
+          <div className="file-list">
+            {files.map((f) => {
+              const idx = f.name.lastIndexOf('/')
+              const base = idx < 0 ? f.name : f.name.slice(idx + 1)
+              const dir = idx < 0 ? '' : f.name.slice(0, idx)
+              return (
+                <a
+                  key={f.id}
+                  href={`#${f.id}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    document.getElementById(f.id)?.scrollIntoView({ behavior: 'instant', block: 'start' })
+                  }}
+                >
+                  <span className="file-basename">{base}</span>
+                  {dir && <span className="file-dir">{dir}</span>}
+                </a>
+              )
+            })}
+          </div>
+        </aside>
+        <div className="diff" ref={diffRef} />
+      </div>
     </div>
   )
 }
