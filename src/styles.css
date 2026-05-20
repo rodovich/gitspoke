@@ -273,6 +273,15 @@ hr {
   font-size: 1rem;
   font-weight: 500;
   color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.d2h-file-name .file-dir {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--body-muted);
 }
 
 .d2h-diff-table,

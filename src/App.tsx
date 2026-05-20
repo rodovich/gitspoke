@@ -70,6 +70,21 @@ export function App() {
     })
     ui.draw()
     ui.highlightCode()
+    diffRef.current.querySelectorAll<HTMLElement>('.d2h-file-name').forEach((el) => {
+      const text = el.textContent ?? ''
+      const idx = text.lastIndexOf('/')
+      const base = document.createElement('span')
+      base.className = 'file-basename'
+      base.textContent = idx < 0 ? text : text.slice(idx + 1)
+      if (idx < 0) {
+        el.replaceChildren(base)
+      } else {
+        const dir = document.createElement('span')
+        dir.className = 'file-dir'
+        dir.textContent = text.slice(0, idx)
+        el.replaceChildren(base, dir)
+      }
+    })
   }, [data])
 
   const bodyHtml = useMemo(() => {
