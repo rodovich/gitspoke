@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
+    "@types/dompurify": "^3.0.5",
     "diff2html": "^3.4.51",
+    "dompurify": "^3.4.5",
     "hono": "^4.6.14",
+    "marked": "^18.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"

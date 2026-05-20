@@ -2,6 +2,7 @@
   --bg: #fcfaf8;
   --fg: rgba(0, 0, 0, 0.85);
   --muted: rgba(0, 0, 0, 0.65);
+  --body-muted: rgba(0, 0, 0, 0.45);
   --border: rgba(0, 0, 0, 0.10);
   --state-open: #1a7f37;
   --state-closed: #cf222e;
@@ -115,10 +116,75 @@ hr {
 .del { color: var(--del); }
 
 .body {
-  white-space: pre-wrap;
   font-size: 0.9375rem;
   line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 36rem;
 }
+
+.body p { margin: 0; }
+
+.body p + h1,
+.body p + h2,
+.body p + h3,
+.body p + h4,
+.body ul + h1,
+.body ul + h2,
+.body ul + h3,
+.body ul + h4,
+.body ol + h1,
+.body ol + h2,
+.body ol + h3,
+.body ol + h4 {
+  margin-top: 0.5rem;
+}
+
+.body h1,
+.body h2,
+.body h3,
+.body h4 {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--body-muted);
+}
+.body h1 { font-size: 1.25rem; }
+.body h2 { font-size: 1.125rem; }
+.body h3 { font-size: 1rem; }
+.body h4 { font-size: 0.875rem; }
+
+.body ul, .body ol { margin: 0; padding-left: 1.5rem; }
+.body li { margin: 0; }
+
+.body a { color: var(--state-merged); }
+
+.body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.body pre {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+.body pre code { padding: 0; background: none; }
+
+.body blockquote {
+  margin: 0 0 0.75rem;
+  padding: 0 1rem;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+}
+
+.body img { max-width: 100%; }
+.body hr { margin: 0.5rem 0; }
 
 .placeholder,
 .error {

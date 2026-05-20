@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
+
+marked.setOptions({ gfm: true, breaks: true })
 
 type PrMeta = {
   number: number
@@ -67,6 +71,12 @@ export function App() {
     ui.highlightCode()
   }, [data])
 
+  const bodyHtml = useMemo(() => {
+    const body = data?.meta.body?.trim()
+    if (!body) return ''
+    return DOMPurify.sanitize(marked.parse(body, { async: false }) as string)
+  }, [data])
+
   if (error) return <div className="error">{error}</div>
   if (!data) return <div className="placeholder">loading…</div>
 
@@ -80,7 +90,7 @@ export function App() {
             #{meta.number}
           </a>
         </h1>
-        {meta.body.trim() && <div className="body">{meta.body}</div>}
+        {bodyHtml && <div className="body" dangerouslySetInnerHTML={{ __html: bodyHtml }} />}
         <div className="sub">
           <span className={`state state-${meta.state.toLowerCase()}`}>{meta.state}</span>
           <span>by {meta.author.login}</span>
