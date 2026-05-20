@@ -1,4 +1,8 @@
-export function FileList({ files }: { files: Array<{ id: string; name: string }> }) {
+export function FileList({
+  files,
+}: {
+  files: Array<{ id: string; name: string; status?: 'added' | 'deleted' }>
+}) {
   return (
     <div className="file-list">
       {files.map((f) => {
@@ -9,6 +13,7 @@ export function FileList({ files }: { files: Array<{ id: string; name: string }>
           <a
             key={f.id}
             href={`#${f.id}`}
+            className={f.status}
             onClick={(e) => {
               e.preventDefault()
               document.getElementById(f.id)?.scrollIntoView({ behavior: 'instant', block: 'start' })

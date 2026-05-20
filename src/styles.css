@@ -10,8 +10,12 @@
   --state-merged: #8250df;
   --add-rgb: 51 204 51;
   --del-rgb: 238 68 34;
-  --add: color-mix(rgb(var(--add-rgb)), black 20%);
-  --del: color-mix(rgb(var(--del-rgb)), black 10%);
+  --add-base: color-mix(in srgb, rgb(var(--add-rgb)), black 30%);
+  --del-base: color-mix(in srgb, rgb(var(--del-rgb)), black 25%);
+  --add: color-mix(in srgb, var(--add-base) 85%, transparent);
+  --del: color-mix(in srgb, var(--del-base) 85%, transparent);
+  --add-muted: color-mix(in srgb, var(--add-base) 70%, transparent);
+  --del-muted: color-mix(in srgb, var(--del-base) 70%, transparent);
   --error: #cf222e;
 
   --d2h-ins-bg-color: rgb(var(--add-rgb) / 0.15);
@@ -100,14 +104,35 @@ aside {
   flex: 0 0 16rem;
   position: sticky;
   top: 0;
-  max-height: 100vh;
-  overflow-y: auto;
+  height: 100vh;
+  box-sizing: border-box;
   margin: -0.5rem -1rem 0;
   padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  transition: flex-basis 0.25s ease, margin-left 0.25s ease, opacity 0.25s ease;
+}
+
+aside.search {
+  flex-basis: 20rem;
+}
+
+aside.closed {
+  margin-left: -17rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+aside.search.closed {
+  margin-left: -21rem;
 }
 
 .file-list {
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -130,6 +155,9 @@ aside {
   background: var(--bg-tinted);
 }
 
+.file-list a.added { color: var(--add-muted); }
+.file-list a.deleted { color: var(--del-muted); }
+
 .file-list .file-basename {
   font-weight: 500;
   overflow: hidden;
@@ -141,6 +169,99 @@ aside {
   color: var(--body-muted);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.diff-search {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+}
+
+.diff-search input {
+  flex: 0 0 auto;
+  font: inherit;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--fg);
+  outline: none;
+}
+
+.diff-search input:focus {
+  border-width: 4px;
+  margin: -3px;
+}
+
+.diff-search .search-results {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0 -1rem;
+}
+
+.diff-search .search-results a {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  line-height: 1.2;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.diff-search .search-results a:hover {
+  background: var(--bg-tinted);
+}
+
+.diff-search .search-results a.added { color: var(--add-muted); }
+.diff-search .search-results a.deleted { color: var(--del-muted); }
+
+.diff-search .search-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.diff-search .search-line .match {
+  font-weight: bold;
+}
+
+.diff-search .search-file {
+  font-size: 0.75rem;
+  color: var(--body-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes diff-line-flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.d2h-diff-table tr.flash {
+  position: relative;
+}
+
+.d2h-diff-table tr.flash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgb(255 220 100 / 0.7);
+  pointer-events: none;
+  animation: diff-line-flash 1.2s ease-out forwards;
 }
 
 .pr h1 {
@@ -344,57 +465,68 @@ aside {
   color: var(--body-muted);
 }
 
-.d2h-diff-table,
-.d2h-diff-tbody {
-  display: block;
-  overflow: hidden;
-}
-
-.d2h-diff-table {
-  margin-bottom: 0;
+.d2h-code-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: none;
   border: 1px solid var(--border);
   border-top-width: 0;
 }
 
-.d2h-diff-table tr {
-  display: flex;
-  justify-content: stretch;
+.d2h-diff-table {
+  margin-bottom: 0;
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .d2h-diff-table td {
+  display: table-cell;
   padding: 0.125rem 0;
-}
-
-.d2h-code-line {
-  padding: 0 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.d2h-code-line-prefix {
-  color: var(--muted);
-}
-
-.d2h-code-linenumber {
-  position: inherit;
-  border-width: 0 1px 0 0;
-}
-
-.d2h-code-linenumber {
-  flex: 0 0 auto;
-}
-
-.d2h-diff-table td:not(.d2h-code-linenumber) {
-  flex: 1 1 auto;
-  overflow: hidden;
-}
-
-.d2h-code-line-ctn {
-  white-space: pre-wrap;
 }
 
 .d2h-diff-table td.d2h-info {
   padding: 0.375rem 0;
+}
+
+.d2h-code-line {
+  padding: 0 0.5rem;
+  width: auto;
+}
+
+.d2h-code-line-ctn {
+  width: auto;
+}
+
+.d2h-code-line-prefix {
+  color: var(--muted);
+  padding-right: 0.5rem;
+}
+
+.d2h-code-linenumber,
+.d2h-file-diff .d2h-code-linenumber.d2h-change {
+  background-color: var(--bg);
+}
+
+.d2h-code-linenumber {
+  position: sticky;
+  left: 0;
+  border-width: 0 1px 0 0;
+}
+
+tr.d2h-ins .d2h-code-linenumber,
+.d2h-code-linenumber.d2h-ins {
+  background-image: linear-gradient(var(--d2h-ins-bg-color), var(--d2h-ins-bg-color));
+}
+
+tr.d2h-del .d2h-code-linenumber,
+.d2h-code-linenumber.d2h-del {
+  background-image: linear-gradient(var(--d2h-del-bg-color), var(--d2h-del-bg-color));
+}
+
+.d2h-code-linenumber.d2h-info {
+  background-image: linear-gradient(var(--d2h-info-bg-color), var(--d2h-info-bg-color));
 }
 
 .d2h-wrapper {
