@@ -1,13 +1,13 @@
 :root {
   --bg: #fcfaf8;
-  --fg: rgba(0, 0, 0, 0.85);
-  --muted: rgba(0, 0, 0, 0.65);
-  --body-muted: rgba(0, 0, 0, 0.45);
-  --border: rgba(0, 0, 0, 0.10);
+  --fg: rgba(17, 0, 0, 0.85);
+  --muted: rgba(17, 0, 0, 0.65);
+  --body-muted: rgba(17, 0, 0, 0.45);
+  --border: rgba(17, 0, 0, 0.10);
   --state-open: #1a7f37;
   --state-closed: #cf222e;
   --state-merged: #8250df;
-  --add-rgb: 34 204 68;
+  --add-rgb: 51 204 51;
   --del-rgb: 238 68 34;
   --add: color-mix(rgb(var(--add-rgb)), black 20%);
   --del: color-mix(rgb(var(--del-rgb)), black 10%);
@@ -24,15 +24,15 @@
   --d2h-del-border-color: var(--border);
 
   --d2h-bg-color: var(--bg);
-  --d2h-dim-color: rgba(0, 0, 0, 0.5);
+  --d2h-dim-color: rgba(17, 0, 0, 0.5);
   --d2h-border-color: none;
   --d2h-line-border-color: var(--border);
   --d2h-file-header-bg-color: none;
   --d2h-file-header-border-color: none;
-  --d2h-empty-placeholder-bg-color: rgba(0, 0, 0, 0.04);
-  --d2h-empty-placeholder-border-color: rgba(0, 0, 0, 0.08);
-  --d2h-info-bg-color: rgba(0, 0, 0, 0.03);
-  --d2h-info-border-color: rgba(0, 0, 0, 0.08);
+  --d2h-empty-placeholder-bg-color: rgba(17, 0, 0, 0.04);
+  --d2h-empty-placeholder-border-color: rgba(17, 0, 0, 0.08);
+  --d2h-info-bg-color: rgba(17, 0, 0, 0.03);
+  --d2h-info-border-color: rgba(17, 0, 0, 0.08);
 }
 
 html {
