@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { marked } from 'marked'
-import { Overview } from './Overview'
 import { Changes } from './Changes'
 
 marked.setOptions({ gfm: true, breaks: true })
@@ -28,7 +27,6 @@ export function App() {
   const { org, repo, num } = useParams()
   const [data, setData] = useState<PrResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [tab, setTab] = useState<'overview' | 'changes'>('overview')
 
   useEffect(() => {
     document.title = `${org}/${repo}#${num}`
@@ -63,44 +61,5 @@ export function App() {
   if (!data) return <div className="placeholder">loading…</div>
 
   const { meta } = data
-  return (
-    <div className="pr">
-      <header>
-        <h1>
-          {meta.title}
-          <a href={meta.url} target="_blank" rel="noreferrer">
-            #{meta.number}
-          </a>
-        </h1>
-        <div className="tabs" role="tablist">
-          <a
-            role="tab"
-            aria-selected={tab === 'overview'}
-            className={tab === 'overview' ? 'active' : ''}
-            onClick={(e) => {
-              e.preventDefault()
-              setTab('overview')
-            }}
-            href="#overview"
-          >
-            Overview
-          </a>
-          <a
-            role="tab"
-            aria-selected={tab === 'changes'}
-            className={tab === 'changes' ? 'active' : ''}
-            onClick={(e) => {
-              e.preventDefault()
-              setTab('changes')
-            }}
-            href="#changes"
-          >
-            Changes
-          </a>
-        </div>
-      </header>
-      <Overview meta={meta} hidden={tab !== 'overview'} />
-      <Changes diff={data.diff} hidden={tab !== 'changes'} />
-    </div>
-  )
+  return <Changes meta={meta} diff={data.diff} />
 }

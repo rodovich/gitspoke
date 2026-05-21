@@ -40,6 +40,8 @@
   --d2h-info-border-color: rgba(17, 0, 0, 0.08);
 }
 
+* { box-sizing: border-box; }
+
 html {
   margin: 0;
   font-size: 18px;
@@ -59,23 +61,10 @@ hr {
 
 #root {
   max-width: 100vw;
-  padding: 2rem 4rem;
   box-sizing: border-box;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-}
-
-.pr {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.pr header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .overview {
@@ -84,49 +73,46 @@ hr {
   gap: 1.5rem;
 }
 
-.overview[hidden],
-.changes[hidden] {
-  display: none;
-}
-
-.changes {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-.changes .diff {
+.diff-column {
   flex: 1 1 auto;
   min-width: 0;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.diff-top {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.diff-top > header {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 0.5rem 0;
+  z-index: 1;
 }
 
 aside {
-  flex: 0 0 16rem;
+  flex: 0 0 20rem;
   position: sticky;
   top: 0;
   height: 100vh;
-  box-sizing: border-box;
-  margin: -0.5rem -1rem 0;
-  padding: 0 1rem;
+  background: var(--bg-tinted);
   display: flex;
   flex-direction: column;
   min-height: 0;
   min-width: 0;
-  transition: flex-basis 0.25s ease, margin-left 0.25s ease, opacity 0.25s ease;
-}
-
-aside.search {
-  flex-basis: 20rem;
+  transition: margin-right 0.25s ease, opacity 0.25s ease;
 }
 
 aside.closed {
-  margin-left: -17rem;
+  margin-right: -20rem;
   opacity: 0;
   pointer-events: none;
-}
-
-aside.search.closed {
-  margin-left: -21rem;
 }
 
 .file-list {
@@ -137,8 +123,7 @@ aside.search.closed {
   flex-direction: column;
   gap: 0;
   font-size: 0.875rem;
-  margin: 0 -1rem;
-  padding: 0.5rem 0;
+  padding: 1rem;
 }
 
 .file-list a {
@@ -179,12 +164,13 @@ aside.search.closed {
   flex-direction: column;
   gap: 0.5rem;
   font-size: 0.875rem;
-  padding: 0.5rem 0;
+  padding: 1rem;
 }
 
 .diff-search input {
   flex: 0 0 auto;
   font: inherit;
+  margin: 0 1rem;
   padding: 0.375rem 0.5rem;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -195,7 +181,7 @@ aside.search.closed {
 
 .diff-search input:focus {
   border-width: 4px;
-  margin: -3px;
+  margin: -3px calc(1rem - 3px);
 }
 
 .diff-search .search-results {
@@ -205,7 +191,6 @@ aside.search.closed {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  margin: 0 -1rem;
 }
 
 .diff-search .search-results a {
@@ -264,7 +249,7 @@ aside.search.closed {
   animation: diff-line-flash 1.2s ease-out forwards;
 }
 
-.pr h1 {
+.diff-top h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
@@ -273,36 +258,11 @@ aside.search.closed {
   gap: 0.75rem;
 }
 
-.pr h1 a {
+.diff-top h1 a {
   font-size: 1.375rem;
   font-weight: 500;
   color: var(--muted);
   text-decoration: none;
-}
-
-.tabs {
-  display: flex;
-  gap: 1rem;
-}
-
-.tabs a {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--muted);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-
-.tabs a:not(.active) {
-  color: var(--body-muted);
-}
-
-.tabs a:not(.active):hover {
-  border-bottom-color: var(--border);
-}
-
-.tabs a.active {
-  cursor: text;
 }
 
 .sub {

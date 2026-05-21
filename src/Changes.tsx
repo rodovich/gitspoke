@@ -2,11 +2,28 @@ import { useEffect, useRef, useState } from 'react'
 import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui'
 import { FileList } from './FileList'
 import { DiffSearch } from './DiffSearch'
+import { Overview } from './Overview'
 
 type AsideContent = 'files' | 'search'
 
-export function Changes({ diff, hidden }: { diff: string; hidden: boolean }) {
-  const [files, setFiles] = useState<Array<{ id: string; name: string; status?: 'added' | 'deleted' }>>([])
+type Meta = {
+  number: number
+  title: string
+  url: string
+  state: 'OPEN' | 'CLOSED' | 'MERGED'
+  body: string
+  author: { login: string }
+  headRefName: string
+  baseRefName: string
+  additions: number
+  deletions: number
+  changedFiles: number
+}
+
+const OVERVIEW_ENTRY = { id: 'overview', name: 'Overview' }
+
+export function Changes({ meta, diff }: { meta: Meta; diff: string }) {
+  const [files, setFiles] = useState<Array<{ id: string; name: string; status?: 'added' | 'deleted' }>>([OVERVIEW_ENTRY])
   const [asideContent, setAsideContent] = useState<AsideContent>('files')
   const [asideOpen, setAsideOpen] = useState(true)
   const diffRef = useRef<HTMLDivElement>(null)
@@ -57,11 +74,10 @@ export function Changes({ diff, hidden }: { diff: string; hidden: boolean }) {
       const bBase = bi < 0 ? b.name : b.name.slice(bi + 1)
       return aBase < bBase ? -1 : aBase > bBase ? 1 : 0
     })
-    setFiles(sorted)
+    setFiles([OVERVIEW_ENTRY, ...sorted])
   }, [diff])
 
   useEffect(() => {
-    if (hidden) return
     const onKey = (e: KeyboardEvent) => {
       if (!e.metaKey || !e.shiftKey) return
       if (e.code === 'KeyF') {
@@ -73,7 +89,7 @@ export function Changes({ diff, hidden }: { diff: string; hidden: boolean }) {
         } else {
           setAsideContent('search')
           setAsideOpen(true)
-          input?.focus()
+          input?.focus({ preventScroll: true })
           input?.select()
         }
       } else if (e.code === 'KeyE') {
@@ -87,10 +103,24 @@ export function Changes({ diff, hidden }: { diff: string; hidden: boolean }) {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [hidden, asideOpen, asideContent])
+  }, [asideOpen, asideContent])
 
   return (
-    <div className="changes" hidden={hidden}>
+    <>
+      <div className="diff-column">
+        <div className="diff-top">
+          <header>
+            <h1>
+              {meta.title}
+              <a href={meta.url} target="_blank" rel="noreferrer">
+                #{meta.number}
+              </a>
+            </h1>
+          </header>
+          <Overview meta={meta} />
+        </div>
+        <div className="diff" ref={diffRef} />
+      </div>
       <aside
         className={`${asideContent}${asideOpen ? '' : ' closed'}`}
         aria-hidden={!asideOpen}
@@ -98,7 +128,6 @@ export function Changes({ diff, hidden }: { diff: string; hidden: boolean }) {
         {asideContent === 'files' && <FileList files={files} />}
         {asideContent === 'search' && <DiffSearch diffRef={diffRef} open={asideOpen} />}
       </aside>
-      <div className="diff" ref={diffRef} />
-    </div>
+    </>
   )
 }

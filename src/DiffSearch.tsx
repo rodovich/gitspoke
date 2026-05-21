@@ -41,7 +41,7 @@ export function DiffSearch({
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (open) inputRef.current?.focus()
+    if (open) inputRef.current?.focus({ preventScroll: true })
   }, [open])
 
   const q = query.trim()

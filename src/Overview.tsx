@@ -13,7 +13,7 @@ type Meta = {
   changedFiles: number
 }
 
-export function Overview({ meta, hidden }: { meta: Meta; hidden: boolean }) {
+export function Overview({ meta }: { meta: Meta }) {
   const bodyHtml = useMemo(() => {
     const body = meta.body?.trim()
     if (!body) return ''
@@ -21,7 +21,7 @@ export function Overview({ meta, hidden }: { meta: Meta; hidden: boolean }) {
   }, [meta.body])
 
   return (
-    <div className="overview" hidden={hidden}>
+    <div className="overview" id="overview">
       {bodyHtml && <div className="body" dangerouslySetInnerHTML={{ __html: bodyHtml }} />}
       <div className="sub">
         <span className={`state state-${meta.state.toLowerCase()}`}>{meta.state}</span>

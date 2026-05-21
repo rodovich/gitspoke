@@ -16,7 +16,8 @@ export function FileList({
             className={f.status}
             onClick={(e) => {
               e.preventDefault()
-              document.getElementById(f.id)?.scrollIntoView({ behavior: 'instant', block: 'start' })
+              if (f.id === 'overview') window.scrollTo({ top: 0, behavior: 'instant' })
+              else document.getElementById(f.id)?.scrollIntoView({ behavior: 'instant', block: 'start' })
             }}
           >
             <span className="file-basename">{base}</span>
