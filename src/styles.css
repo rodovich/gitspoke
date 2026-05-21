@@ -358,7 +358,7 @@ aside.closed {
   color: var(--muted);
 }
 
-.body img { max-width: 100%; }
+.body img { max-width: 100%; height: auto; }
 .body hr { margin: 0.5rem 0; }
 
 .placeholder,

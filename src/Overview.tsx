@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
+import { renderMarkdown } from './markdown'
 
 type Meta = {
   state: 'OPEN' | 'CLOSED' | 'MERGED'
@@ -14,11 +13,7 @@ type Meta = {
 }
 
 export function Overview({ meta }: { meta: Meta }) {
-  const bodyHtml = useMemo(() => {
-    const body = meta.body?.trim()
-    if (!body) return ''
-    return DOMPurify.sanitize(marked.parse(body, { async: false }) as string)
-  }, [meta.body])
+  const bodyHtml = useMemo(() => renderMarkdown(meta.body ?? ''), [meta.body])
 
   return (
     <div className="overview" id="overview">
