@@ -358,7 +358,11 @@ aside.closed {
   color: var(--muted);
 }
 
-.body img { max-width: 100%; height: auto; }
+.body img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+}
 .body hr { margin: 0.5rem 0; }
 
 .placeholder,
